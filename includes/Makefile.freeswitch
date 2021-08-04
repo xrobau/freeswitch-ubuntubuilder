@@ -8,13 +8,14 @@ FSDIR=$(BUILDSOURCE)/$(FSPREFIX)
 .PHONY: freeswitch fsdocker force
 freeswitch: setup  $(DEBDEST)/$(FSMAINDEB)
 
-fsdocker: $(FSDOCKERTAG)
+fsdocker: $(FSDOCKERTAG) fsprep patches
+	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX)/debian fsdocker:$(VERSION) ./bootstrap.sh -chirsute
 	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) bash
 
 .PHONY: fsforce
 fsforce: fsprep freeswitch
 
-$(DEBDEST)/freeswitch-%.deb $(DEBDEST)/libfreeswitch%: $(DEBDEST)/$(FSMAINDEB)
+$(DEBDEST)/freeswitch%.deb $(DEBDEST)/libfreeswitch%:
 	cp $(BUILDSOURCE)/$(@F) $@
 
 $(DEBDEST)/$(FSMAINDEB): $(BUILDSOURCE)/$(FSMAINDEB)
@@ -22,23 +23,24 @@ $(DEBDEST)/$(FSMAINDEB): $(BUILDSOURCE)/$(FSMAINDEB)
 
 $(BUILDSOURCE)/$(FSMAINDEB): $(FSDOCKERTAG) $(FSDIR)/debian/patches/series | $(FSDIR)/debian/source/include-binaries
 	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX)/debian fsdocker:$(VERSION) ./bootstrap.sh -chirsute
-	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) dpkg-buildpackage -us -uc
-	@echo docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) bash
+	@echo dpkg-buildpackage -us -uc
+	@true || docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) dpkg-buildpackage -us -uc
+	@true && docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) bash
 
 FSBINS=$(addprefix $(FSDIR)/libs/,$(FSDEPS))
 FSPATCHES=$(notdir $(wildcard patches/freeswitch/*.patch))
 FSPATCHESDEST=$(addprefix $(FSDIR)/debian/patches/,$(FSPATCHES))
 FSDEPDOWNLOAD=$(addprefix $(DOWNLOADS)/,$(FSDEPS))
 
-$(FSDIR)/debian/source/include-binaries: fsprep
 
 .PHONY: fsprep
-fsprep: $(BUILDSOURCE)/$(FSFILENAME) $(FSDEPDOWNLOAD) ./prepfreeswitch.sh
+$(FSDIR)/debian/source/include-binaries fsprep: $(BUILDSOURCE)/$(FSFILENAME) $(FSDEPDOWNLOAD) ./prepfreeswitch.sh
 	./prepfreeswitch.sh $(BUILDSOURCE) $(FSPREFIX) $(BUILDSOURCE)/$(FSFILENAME)
 	./genchangelog.sh freeswitch "$(FSVERSION)-$(FSREV)" $(FSDIR)
 	for p in $(FSDEPS); do cp $(DOWNLOADS)/$$p $(FSDIR)/libs; echo libs/$$p >> $(FSDIR)/debian/source/include-binaries; done
 
-$(BUILDSOURCE)/$(FSPREFIX)/debian/patches/series: fixfsvers.sh patches/freeswitch/series $(BUILDSOURCE)/$(FSPREFIX)/debian/patches/ $(FSPATCHESDEST)
+.PHONY: patches
+patches $(BUILDSOURCE)/$(FSPREFIX)/debian/patches/series: fixfsvers.sh patches/freeswitch/series $(BUILDSOURCE)/$(FSPREFIX)/debian/patches/ $(FSPATCHESDEST)
 	cp patches/freeswitch/series $@
 	./fixfsvers.sh $(BUILDSOURCE)/$(FSPREFIX) $(FSMAJOR) $(FSMINOR) $(FSMICRO) $(FSREV)
 
@@ -61,9 +63,6 @@ $(FSPATCHESDEST): patches/freeswitch/$$(@F)
 ## run against it.
 $(DOWNLOADS)/$(FSFILENAME): | $(DOWNLOADS)
 	wget -O $(@) $(FSURL)
-
-x:
-	echo $(SRCDEBS)
 
 $(FSDOCKERTAG): $(BASEDOCKERTAG) fsdocker/alldebs.tar.gz $(wildcard fsdocker/*)
 	@echo Starting $(@)
