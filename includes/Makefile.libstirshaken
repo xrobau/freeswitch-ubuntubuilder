@@ -1,0 +1,33 @@
+######
+##
+## libstirshaken
+##
+
+.PHONY: libss
+libss: setup $(DEBDEST)/$(LIBSSDEB)
+
+$(DEBDEST)/$(LIBSSDEB) $(DEBDEST)/$(LIBSSDEVDEB): $(BUILDSOURCE)/$(LIBSSDEB)
+	cp $(BUILDSOURCE)/$(@F) $@
+
+$(DOWNLOADS)/$(LIBSSFILENAME):
+	wget $(LIBSSURL) -O $(@)
+
+$(BUILDSOURCE)/$(LIBSSDEB): $(LIBSSDOCKERTAG) $(BUILDSOURCE)/$(LIBSSFILENAME)
+	rm -rf $(BUILDSOURCE)/$(LIBSSPREFIX) && mkdir -p $(BUILDSOURCE) && cd $(BUILDSOURCE) && tar xf $(BUILDSOURCE)/$(LIBSSFILENAME)
+	sed -ri 's_(prefix=/usr)_\1 CFLAGS=-Wl,--allow-multiple-definition_' $(BUILDSOURCE)/$(LIBSSPREFIX)/debian/rules
+	sed 's/__VERSION__/$(LIBSSVERS)/' < libss_fix_version > $(BUILDSOURCE)/$(LIBSSPREFIX)/debian/patches/libss_fix_version && echo libss_fix_version > $(BUILDSOURCE)/$(LIBSSPREFIX)/debian/patches/series
+	./genchangelog.sh libstirshaken "$(LIBSSVERS)-$(LIBSSREL)" $(BUILDSOURCE)/$(LIBSSPREFIX)
+	docker run --rm $(VOLUMES) -it  -w /usr/local/build/SOURCES/$(LIBSSPREFIX) libssdocker:$(VERSION) dpkg-buildpackage -us -uc
+
+LIBSSREQS=$(LIBKSDEB) $(LIBJWTDEB) $(LIBJWTDEVDEB) 
+
+$(LIBSSDOCKERTAG): $(BASEDOCKERTAG) $(addprefix libssdocker/,$(LIBSSREQS)) $(wildcard libssdocker/*)
+	@echo Starting $(@)
+	docker build --build-arg VERSION=$(VERSION) -t libssdocker:$(VERSION) libssdocker
+	touch $(@)
+
+##
+##
+##
+######
+

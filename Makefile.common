@@ -1,0 +1,54 @@
+VOLUMES=-v /usr/local/ccache:/usr/local/ccache -v $(BUILDDIR):/usr/local/build
+
+BUILDSOURCE=$(BUILDDIR)/SOURCES
+
+$(DOWNLOADS) $(BUILDSOURCE) $(DEBDEST):
+	mkdir -p $@
+
+
+$(BUILDSOURCE)/%: $(DOWNLOADS)/% | $(DOWNLOADS) $(BUILDSOURCE)
+	cp $< $@
+
+
+SDSPURL=https://github.com/freeswitch/spandsp/tarball/$(SPANDSPHASH)
+SDSPFILENAME=spandsp_$(SDSPVER).orig.tar.gz
+SDSPSHORT=$(shell echo $(SPANDSPHASH) | cut -c1-7)
+SDSPPREFIX=freeswitch-spandsp-$(SDSPSHORT)
+SDSPREL=42
+SDSPDEBS=libspandsp3_$(SDSPVER)-$(SDSPREL)_amd64.deb libspandsp3-dev_$(SDSPVER)-$(SDSPREL)_amd64.deb
+
+LIBJWTURL=https://github.com/benmcollins/libjwt/archive/v$(LIBJWTVERS).tar.gz
+LIBJWTFILE=libjwt_$(LIBJWTVERS).orig.tar.gz
+LIBJWTPREFIX=libjwt-$(LIBJWTVERS)
+LIBJWTDEB=libjwt0_$(LIBJWTVERS)-$(LIBJWTREL)_amd64.deb
+LIBJWTDEVDEB=libjwt-dev_$(LIBJWTVERS)-$(LIBJWTREL)_amd64.deb
+LIBJWTDEBS=$(LIBJWTDEB) $(LIBJWTDEVDEB)
+
+LIBKSURL=https://github.com/signalwire/libks/tarball/$(LIBKSHASH)
+LIBKSFILENAME=libks-$(VERSION)-$(LIBKSSHORT).tar.gz
+LIBKSSHORT=$(shell echo $(LIBKSHASH) | cut -c1-7)
+LIBKSPREFIX=signalwire-libks-$(LIBKSSHORT)
+LIBKSDEB=libks_$(LIBKSVERS)-$(LIBKSREL)_hirsute_amd64.deb
+
+LIBSSURL=https://github.com/signalwire/libstirshaken/tarball/$(LIBSSHASH)
+LIBSSFILENAME=libstirshaken_$(LIBSSVERS).orig.tar.gz
+LIBSSSHORT=$(shell echo $(LIBSSHASH) | cut -c1-7)
+LIBSSPREFIX=signalwire-libstirshaken-$(LIBSSSHORT)
+LIBSSDEB=libstirshaken1_$(LIBSSVERS)-$(LIBSSREL)_amd64.deb
+LIBSSDEVDEB=libstirshaken-dev_$(LIBSSVERS)-$(LIBSSREL)_amd64.deb
+LIBSSDOCKERTAG=$(shell pwd)/.libss_docker_build
+LIBSSDEBS=$(LIBSSDEB) $(LIBSSDEVDEB)
+
+FSURL=https://github.com/signalwire/freeswitch/tarball/$(FSHASH)
+FSSHORT=$(shell echo $(FSHASH) | cut -c1-7)
+FSRELEASE=$(FSVERSION)-$(FSREV)
+FSFILENAME=freeswitch_$(FSVERSION).orig.tar.gz
+FSPREFIX=signalwire-freeswitch-$(FSSHORT)
+FSDOCKERTAG=$(shell pwd)/.fs_docker_build
+FSPATCHES=$(notdir $(wildcard patches/freeswitch/*))
+FSMAINDEB=freeswitch_$(FSRELEASE)_amd64.deb        
+
+DOCKERTAGS=$(LIBSSDOCKERTAG) $(FSDOCKERTAG) $(BASEDOCKERTAG)
+
+SRCDEBS=$(SDSPDEBS) $(SOFIADEBS) $(LIBJWTDEBS) $(LIBKSDEB) $(LIBSSDEBS)
+

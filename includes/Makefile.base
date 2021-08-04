@@ -1,0 +1,27 @@
+
+##########
+##
+## Base image
+##
+
+.PHONY: base
+base: setup $(BASEDOCKERTAG)
+
+$(BASEDOCKERTAG): basedocker/docbook-xsl-snapshot.zip basedocker/ccache.conf $(wildcard basedocker/*)
+	@echo Starting $(@)
+	docker build --build-arg VERSION=$(VERSION) -t basedocker:$(VERSION) basedocker
+	touch $(@)
+
+basedocker/%.zip: $(DOWNLOADS)/%.zip
+	cp $< $@
+
+$(DOWNLOADS)/docbook-xsl-snapshot.zip:
+	wget -O $@ https://github.com/docbook/xslt10-stylesheets/releases/download/snapshot%2F2020-06-03/docbook-xsl-snapshot.zip
+
+basedocker/ccache.conf: ccache.conf
+	cp $< $@
+
+##
+##
+##########
+

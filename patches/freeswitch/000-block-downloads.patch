@@ -1,0 +1,12 @@
+
+--- freeswitch-1.10.7.orig/build/getlib.sh.in
++++ freeswitch-1.10.7/build/getlib.sh.in
+@@ -32,6 +32,8 @@ esac
+ 
+ if [ ! -d $tarfile ]; then
+   if [ ! -f $tarfile ]; then
++	  echo "PACKAGING ERROR - $tarfile does not exist in $(pwd)"
++	  exit 1
+     rm -fr $uncompressed
+     $DOWNLOAD_CMD $base$tarfile
+     if [ ! -f $tarfile ]; then

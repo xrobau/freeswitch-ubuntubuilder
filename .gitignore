@@ -1,0 +1,9 @@
+build/
+downloads/
+*.xz
+*.bz2
+*.gz
+*.rpm
+*.deb
+*.zip
+.*docker_build

@@ -1,0 +1,12 @@
+--- ./src/include/switch_apr.h.orig	2021-07-28 04:42:01.175344191 +0000
++++ ./src/include/switch_apr.h	2021-07-28 04:44:12.355886855 +0000
+@@ -51,6 +51,9 @@
+ typedef pthread_t switch_thread_id_t;
+ #endif
+ 
++/* Add timeval to avoid visibility error */
++struct timeval;
++
+ SWITCH_DECLARE(switch_thread_id_t) switch_thread_self(void);
+ 
+ /*! \brief Compare two thread ids

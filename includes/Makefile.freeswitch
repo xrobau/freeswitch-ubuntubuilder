@@ -1,0 +1,80 @@
+
+#####
+##
+## Freeswitch.
+##
+FSDIR=$(BUILDSOURCE)/$(FSPREFIX)
+
+.PHONY: freeswitch fsdocker force
+freeswitch: setup  $(DEBDEST)/$(FSMAINDEB)
+
+fsdocker: $(FSDOCKERTAG)
+	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) bash
+
+.PHONY: fsforce
+fsforce: fsprep freeswitch
+
+$(DEBDEST)/freeswitch-%.deb $(DEBDEST)/libfreeswitch%: $(DEBDEST)/$(FSMAINDEB)
+	cp $(BUILDSOURCE)/$(@F) $@
+
+$(DEBDEST)/$(FSMAINDEB): $(BUILDSOURCE)/$(FSMAINDEB)
+	cp $< $@
+
+$(BUILDSOURCE)/$(FSMAINDEB): $(FSDOCKERTAG) $(FSDIR)/debian/patches/series | $(FSDIR)/debian/source/include-binaries
+	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX)/debian fsdocker:$(VERSION) ./bootstrap.sh -chirsute
+	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) dpkg-buildpackage -us -uc
+	@echo docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) bash
+
+FSBINS=$(addprefix $(FSDIR)/libs/,$(FSDEPS))
+FSPATCHES=$(notdir $(wildcard patches/freeswitch/*.patch))
+FSPATCHESDEST=$(addprefix $(FSDIR)/debian/patches/,$(FSPATCHES))
+FSDEPDOWNLOAD=$(addprefix $(DOWNLOADS)/,$(FSDEPS))
+
+$(FSDIR)/debian/source/include-binaries: fsprep
+
+.PHONY: fsprep
+fsprep: $(BUILDSOURCE)/$(FSFILENAME) $(FSDEPDOWNLOAD) ./prepfreeswitch.sh
+	./prepfreeswitch.sh $(BUILDSOURCE) $(FSPREFIX) $(BUILDSOURCE)/$(FSFILENAME)
+	./genchangelog.sh freeswitch "$(FSVERSION)-$(FSREV)" $(FSDIR)
+	for p in $(FSDEPS); do cp $(DOWNLOADS)/$$p $(FSDIR)/libs; echo libs/$$p >> $(FSDIR)/debian/source/include-binaries; done
+
+$(BUILDSOURCE)/$(FSPREFIX)/debian/patches/series: fixfsvers.sh patches/freeswitch/series $(BUILDSOURCE)/$(FSPREFIX)/debian/patches/ $(FSPATCHESDEST)
+	cp patches/freeswitch/series $@
+	./fixfsvers.sh $(BUILDSOURCE)/$(FSPREFIX) $(FSMAJOR) $(FSMINOR) $(FSMICRO) $(FSREV)
+
+$(BUILDSOURCE)/$(FSPREFIX)/libs/%: $(DOWNLOADS)/%
+	cp $< $@
+
+$(BUILDSOURCE)/$(FSPREFIX)/debian/patches/:
+	mkdir -p $@
+
+## This is a list of the freeswitch dependancies to download.
+$(FSDEPDOWNLOAD): | $(DOWNLOADS)
+	wget -nc -O $(@) http://files.freeswitch.org/downloads/libs/$(@F)
+	
+## Some makefile magic to glob all the freeswitch patches into place
+.SECONDEXPANSION:
+$(FSPATCHESDEST): patches/freeswitch/$$(@F)
+	cp $(<) $(@)
+
+## This is the raw file, from github. autoconf/bootstrap needs to be
+## run against it.
+$(DOWNLOADS)/$(FSFILENAME): | $(DOWNLOADS)
+	wget -O $(@) $(FSURL)
+
+x:
+	echo $(SRCDEBS)
+
+$(FSDOCKERTAG): $(BASEDOCKERTAG) fsdocker/alldebs.tar.gz $(wildcard fsdocker/*)
+	@echo Starting $(@)
+	docker build --build-arg VERSION=$(VERSION) -t fsdocker:$(VERSION) fsdocker
+	touch $(@)
+
+fsdocker/alldebs.tar.gz: $(addprefix $(DEBDEST)/,$(SRCDEBS))
+	tar -C $(DEBDEST) -zcvf $@ $(SRCDEBS)
+
+##
+##
+##
+######
+

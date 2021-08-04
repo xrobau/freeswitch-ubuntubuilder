@@ -1,0 +1,25 @@
+
+######
+##
+## SpanDSP
+##
+.PHONY: spandsp spandsp-shell
+spandsp: $(addprefix $(DEBDEST)/,$(SDSPDEBS))
+
+spandsp-shell:
+	docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(SDSPPREFIX) basedocker:$(VERSION) bash
+
+$(addprefix $(DEBDEST)/,$(SDSPDEBS)): $(addprefix $(BUILDSOURCE)/,$(SDSPDEBS)) | $(DEBDEST)
+	cp $(BUILDSOURCE)/$(@F) $@
+
+$(addprefix $(BUILDSOURCE)/,$(SDSPDEBS)): $(BUILDSOURCE)/$(SDSPFILENAME) $(BASEDOCKERTAG)
+	rm -rf $(BUILDSOURCE)/$(SDSPPREFIX) && mkdir -p $(BUILDSOURCE) && cd $(BUILDSOURCE) && tar xf $<
+	docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(SDSPPREFIX) basedocker:$(VERSION) dpkg-buildpackage -us -uc
+
+$(DOWNLOADS)/$(SDSPFILENAME): | $(DOWNLOADS)
+	wget $(SDSPURL) -O $(@)
+##
+##
+##
+######
+

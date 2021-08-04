@@ -1,0 +1,32 @@
+
+######
+##
+## lib-sofia-sip
+##
+
+SOFIAURL=https://github.com/freeswitch/sofia-sip/tarball/$(SOFIAHASH)
+SOFIAFILENAME=$(SOFIAPREFIX).tar.gz
+SOFIASHORT=$(shell echo $(SOFIAHASH) | cut -c1-7)
+SOFIAPREFIX=freeswitch-sofia-sip-$(SOFIASHORT)
+SOFIATAG=$(SOFIAVERSION)-$(SOFIARELEASE)
+SOFIADEB=libsofia-sip-ua0_$(SOFIATAG)_amd64.deb
+SOFIADEBS=$(SOFIADEB) libsofia-sip-ua-dev_$(SOFIATAG)_amd64.deb libsofia-sip-ua-glib3_$(SOFIATAG)_amd64.deb libsofia-sip-ua-glib-dev_$(SOFIATAG)_amd64.deb sofia-sip-bin_$(SOFIATAG)_amd64.deb
+
+.PHONY: libsofia
+libsofia: setup $(DEBDEST)/$(SOFIADEB)
+
+$(DOWNLOADS)/$(SOFIAFILENAME):
+	wget -nc -O $(@) $(SOFIAURL)
+
+$(BUILDSOURCE)/$(SOFIADEB): $(BASEDOCKERTAG) $(BUILDSOURCE)/$(SOFIAFILENAME)
+	rm -rf $(BUILDSOURCE)/$(SOFIAPREFIX) && mkdir -p $(BUILDSOURCE) && cd $(BUILDSOURCE) && tar xf $(BUILDSOURCE)/$(SOFIAFILENAME)
+	./genchangelog.sh sofia-sip "$(SOFIAVERSION)-$(SOFIARELEASE)" $(BUILDSOURCE)/$(SOFIAPREFIX)
+	docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(SOFIAPREFIX) basedocker:$(VERSION) dpkg-buildpackage -us -uc
+
+$(addprefix $(DEBDEST)/,$(SOFIADEBS)): $(BUILDSOURCE)/$(SOFIADEB)
+	cp $(BUILDSOURCE)/$(@F) $@
+
+##
+##
+##
+#####

@@ -1,0 +1,32 @@
+
+#####
+##
+##
+TSUFFIX=_1.10.7-dev2_amd64.deb        
+TESTDOCKERTAG=$(shell pwd)/.test_docker_build
+FSTESTPKGS=mod-sofia mod-lua mod-console mod-logfile mod-dialplan-xml mod-odbc-cdr mod-spandsp mod-mariadb mod-sndfile mod-json-cdr mod-xml-cdr mod-lcr mod-nibblebill mod-native-file mod-xml-curl mod-db lang-en mod-hash mod-local-stream mod-commands mod-dptools mod-event-socket mod-curl mod-xml-rpc mod-tone-stream
+TESTDEBS=libfreeswitch1$(TSUFFIX) freeswitch$(TSUFFIX) $(addsuffix $(TSUFFIX),$(addprefix freeswitch-,$(FSTESTPKGS)))
+TESTDEBSDEST=$(addprefix testdocker/,$(TESTDEBS))
+
+.PHONY: test
+
+test: $(TESTDOCKERTAG)
+	@echo -e 'Test container starting. Connect to freeswitch using:\n  fs_cli -p"testbuild"'
+	@docker run --rm $(VOLUMES) -it testdocker:$(VERSION) bash -c '/usr/bin/freeswitch -nonat -ncwait ; bash'
+
+testdocker/fs.tar.gz:
+	@echo You need to build your own test scaffolding and put it in $(@)
+	exit 1
+
+.SECONDEXPANSION:
+testdocker/%.deb: $(DEBDEST)/$$(@F)
+	cp $(DEBDEST)/$(@F) $@
+
+$(TESTDOCKERTAG): testdocker/fs.tar.gz $(TESTDEBSDEST) $(wildcard testdocker/*)
+	@echo Starting $(@)
+	docker build --build-arg VERSION=$(VERSION) --build-arg FREESWITCH=$(FSVERSION)-$(FSRELEASE) -t testdocker:$(VERSION) testdocker
+	touch $(@)
+
+
+
+

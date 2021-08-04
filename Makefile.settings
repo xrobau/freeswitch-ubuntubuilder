@@ -1,0 +1,44 @@
+## Things to change
+##
+SPANDSPHASH=c3e87e27c2110e75083d30fbd57b2bc37fb06078
+SDSPVER=3.0.0
+SDSPREL=42
+
+## Git hash for libstirshaken 
+##   https://github.com/signalwire/libstirshaken
+LIBSSHASH=8a12e1c750e86133564be69cfece9ccfe39deb52
+LIBSSVERS=2021.07.17
+LIBSSREL=1
+
+## Git hash for libkitchensink
+##   https://github.com/signalwire/libks
+LIBKSHASH=0b4a6e8181578ed9594cad536c11fb4e284a4849
+LIBKSVERS=1.7.1
+LIBKSREL=5
+
+## libjwt version
+##   https://github.com/benmcollins/libjwt/archive
+LIBJWTVERS=1.13.1
+LIBJWTREL=4
+
+## Git hash for libsofia-sip 
+##   https://github.com/freeswitch/sofia-sip
+SOFIAHASH=fbab3b7b3d077105378585d75d61a0a9c6fb7a4e
+## What version and release we are claiming it is.
+SOFIAVERSION=1.13.4
+SOFIARELEASE=5
+
+## Git hash for freeswitch
+##   https://github.com/signalwire/freeswitch
+FSHASH=5c6fd51c115f4029926197095d436d527277c0e2
+## What version of freeswitch we are claiming it is
+FSMAJOR=1
+FSMINOR=10
+FSMICRO=7
+FSREV=$(VERSION)~001
+HREV=
+FSVERSION=$(FSMAJOR).$(FSMINOR).$(FSMICRO)
+
+## Download these dependancies before building freeswitch
+FSDEPS=pocketsphinx-0.8.tar.gz sphinxbase-0.8.tar.gz communicator_semi_6000_20080321.tar.gz freeradius-client-1.1.7.tar.gz
+
