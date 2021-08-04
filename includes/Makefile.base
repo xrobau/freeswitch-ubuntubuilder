@@ -4,6 +4,8 @@
 ## Base image
 ##
 
+BASEDOCKERTAG=$(shell pwd)/.base_docker_build
+
 .PHONY: base
 base: setup $(BASEDOCKERTAG)
 
