@@ -66,7 +66,7 @@ $(DOWNLOADS)/$(FSFILENAME): | $(DOWNLOADS)
 ## Take all the debs we have previously build, and stick them in a tarball,
 ## which we inject into the container
 fsdocker/alldebs.tar.gz: $(addprefix $(DEBDEST)/,$(SRCDEBS))
-	tar -C $(DEBDEST) -zcvf $@ $(SRCDEBS)
+	tar -C $(DEBDEST) -zcvf $@ $(SRCDEBS) || rm -f $@ 
 
 $(FSDOCKERTAG): $(BASEDOCKERTAG) fsdocker/alldebs.tar.gz $(wildcard fsdocker/*)
 	@echo Starting $(@)
