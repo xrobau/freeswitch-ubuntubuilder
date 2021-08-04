@@ -9,6 +9,7 @@ $(DOWNLOADS) $(BUILDSOURCE) $(DEBDEST):
 $(BUILDSOURCE)/%: $(DOWNLOADS)/% | $(DOWNLOADS) $(BUILDSOURCE)
 	cp $< $@
 
+BASEDOCKERTAG=$(shell pwd)/.base_docker_build
 
 SDSPURL=https://github.com/freeswitch/spandsp/tarball/$(SPANDSPHASH)
 SDSPFILENAME=spandsp_$(SDSPVER).orig.tar.gz
