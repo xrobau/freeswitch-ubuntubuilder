@@ -43,6 +43,10 @@ shell: setup $(BASEDOCKERTAG)
 
 setup: | /usr/local/ccache/ccache.conf $(BUILDSOURCE) $(BUILDDIR) $(DOWNLOADS) $(DEBDEST)
 
+
+/usr/local/ccache/ccache.conf: ccache.conf
+	mkdir -p $(@D) && cp $< $@
+
 clean:
 	rm -rf build $(DOCKERTAGS) $(DEBDEST)/ *docker/*deb basedocker/docbook-xsl-snapshot.zip testdocker/*gz
 
