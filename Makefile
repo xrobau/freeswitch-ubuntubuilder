@@ -2,9 +2,10 @@
 VERSION=20210802
 RELEASE=1
 
-BUILDDIR=$(shell pwd)/build
-DOWNLOADS=$(shell pwd)/downloads
-DEBDEST=$(BUILDDIR)/debs
+ROOT:=$(shell pwd)
+BUILDDIR:=$(ROOT)/build
+DOWNLOADS:=$(ROOT)/downloads
+DEBDEST:=$(BUILDDIR)/debs
 
 include Makefile.common
 
@@ -26,17 +27,8 @@ help:
 	@echo "  'make fsdocker'  - Build stage1, build the fscontainer using those debs"
 	@echo "  'make freeswitch'- Build freeswitch using the fsdocker container"
 
-# This autoloads anything matching Makefile.*, excluding common, which
-# we have already loaded
-define doinclude =
-$(warning Loading $1)
-$(eval include $1)
-$(eval MAKEFILES += $1)
-endef
-AUTOLOAD:=$(foreach m,$(wildcard includes/Makefile.*),$(eval $(call doinclude,$(m))))
-
-debug:
-	@echo $(MAKEFILES)
+# Load all our associated makefiles
+include $(wildcard includes/Makefile.*)
 
 shell: setup $(BASEDOCKERTAG)
 	docker run --rm $(VOLUMES) -it basedocker:$(VERSION) bash
@@ -54,9 +46,10 @@ distclean: clean
 	rm -rf downloads/
 
 stage1: $(addprefix $(DEBDEST)/,$(SRCDEBS))
-	@echo Stage 1
+	@echo Stage 1 debs complete, build $(SRCDEBS)
 
-debs: stage1
+debs: stage1 freeswitch
 
 libssdocker/%.deb fsdocker/%.deb: $(DEBDEST)/%.deb
 	cp $< $@
+

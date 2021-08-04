@@ -9,7 +9,13 @@ $(DOWNLOADS) $(BUILDSOURCE) $(DEBDEST):
 $(BUILDSOURCE)/%: $(DOWNLOADS)/% | $(DOWNLOADS) $(BUILDSOURCE)
 	cp $< $@
 
-BASEDOCKERTAG=$(shell pwd)/.base_docker_build
+BASEDOCKERTAG=$(ROOT)/.base_docker_build
+
+## Testdocker won't work for most people,  you need to provide
+## a default freeswitch config called fs.tar.gz. See the test
+## makefile for how I do it, and you can figure it out from
+## there. Sorry!
+TESTDOCKERTAG=$(BASE)/.test_docker_build
 
 SDSPURL=https://github.com/freeswitch/spandsp/tarball/$(SPANDSPHASH)
 SDSPFILENAME=spandsp_$(SDSPVER).orig.tar.gz
@@ -37,7 +43,7 @@ LIBSSSHORT=$(shell echo $(LIBSSHASH) | cut -c1-7)
 LIBSSPREFIX=signalwire-libstirshaken-$(LIBSSSHORT)
 LIBSSDEB=libstirshaken1_$(LIBSSVERS)-$(LIBSSREL)_amd64.deb
 LIBSSDEVDEB=libstirshaken-dev_$(LIBSSVERS)-$(LIBSSREL)_amd64.deb
-LIBSSDOCKERTAG=$(shell pwd)/.libss_docker_build
+LIBSSDOCKERTAG=$(BASE)/.libss_docker_build
 LIBSSDEBS=$(LIBSSDEB) $(LIBSSDEVDEB)
 
 FSURL=https://github.com/signalwire/freeswitch/tarball/$(FSHASH)
@@ -45,11 +51,21 @@ FSSHORT=$(shell echo $(FSHASH) | cut -c1-7)
 FSRELEASE=$(FSVERSION)-$(FSREV)
 FSFILENAME=freeswitch_$(FSVERSION).orig.tar.gz
 FSPREFIX=signalwire-freeswitch-$(FSSHORT)
-FSDOCKERTAG=$(shell pwd)/.fs_docker_build
+FSDOCKERTAG=$(BASE)/.fs_docker_build
 FSPATCHES=$(notdir $(wildcard patches/freeswitch/*))
 FSMAINDEB=freeswitch_$(FSRELEASE)_amd64.deb        
+
+SOFIAURL=https://github.com/freeswitch/sofia-sip/tarball/$(SOFIAHASH)
+SOFIAFILENAME=$(SOFIAPREFIX).tar.gz
+SOFIASHORT=$(shell echo $(SOFIAHASH) | cut -c1-7)
+SOFIAPREFIX=freeswitch-sofia-sip-$(SOFIASHORT)
+SOFIATAG=$(SOFIAVERSION)-$(SOFIARELEASE)
+SOFIADEB=libsofia-sip-ua0_$(SOFIATAG)_amd64.deb
+SOFIADEBS=$(SOFIADEB) libsofia-sip-ua-dev_$(SOFIATAG)_amd64.deb libsofia-sip-ua-glib3_$(SOFIATAG)_amd64.deb libsofia-sip-ua-glib-dev_$(SOFIATAG)_amd64.deb sofia-sip-bin_$(SOFIATAG)_amd64.deb
 
 DOCKERTAGS=$(LIBSSDOCKERTAG) $(FSDOCKERTAG) $(BASEDOCKERTAG)
 
 SRCDEBS=$(SDSPDEBS) $(SOFIADEBS) $(LIBJWTDEBS) $(LIBKSDEB) $(SOFIADEBS)
 
+## This is used in a bunch of places
+TIMESTAMP=$(shell date '+%a, %d %b %Y %T -0000' --utc)

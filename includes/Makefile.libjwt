@@ -15,8 +15,6 @@ $(DOWNLOADS)/libjwt-packaging.zip: | $(DOWNLOADS)
 $(DEBDEST)/$(LIBJWTDEB) $(DEBDEST)/$(LIBJWTDEVDEB): $(BUILDSOURCE)/$(LIBJWTDEB)
 	cp $(BUILDSOURCE)/$(@F) $@
 
-TIMESTAMP=$(shell date '+%a, %d %b %Y %T -0000' --utc)
-
 $(BUILDSOURCE)/$(LIBJWTDEB): $(BASEDOCKERTAG) $(BUILDSOURCE)/$(LIBJWTFILE) $(BUILDSOURCE)/libjwt-packaging.zip
 	rm -rf $(BUILDSOURCE)/$(LIBJWTPREFIX) $(BUILDSOURCE)/libjwt-packaging-master && \
 		mkdir -p $(BUILDSOURCE) && cd $(BUILDSOURCE) && tar xf $(BUILDSOURCE)/$(LIBJWTFILE) && \

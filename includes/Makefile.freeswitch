@@ -3,6 +3,7 @@
 ##
 ## Freeswitch.
 ##
+
 FSDIR=$(BUILDSOURCE)/$(FSPREFIX)
 
 .PHONY: freeswitch fsdocker force
@@ -28,19 +29,20 @@ $(BUILDSOURCE)/$(FSMAINDEB): $(FSDOCKERTAG) $(FSDIR)/debian/patches/series
 	@true || docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) bash
 
 FSBINS=$(addprefix $(FSDIR)/libs/,$(FSDEPS))
-FSPATCHES=$(notdir $(wildcard patches/freeswitch/*.patch))
-FSPATCHESDEST=$(addprefix $(FSDIR)/debian/patches/,$(FSPATCHES))
+SRCPATCHDIR=$(ROOT)/patches/freeswitch
+FSPATCHES=$(notdir $(wildcard $(SRCPATCHDIR)/*.patch))
+DESTPATCHDIR=$(FSDIR)/debian/patches
+FSPATCHESDEST=$(addprefix $(DESTPATCHDIR)/,$(FSPATCHES))
 FSDEPDOWNLOAD=$(addprefix $(DOWNLOADS)/,$(FSDEPS))
 
-
 .PHONY: fsprep
-$(FSDIR)/debian/source/include-binaries fsprep: ./prepfreeswitch.sh $(BUILDSOURCE)/$(FSFILENAME) $(FSDEPDOWNLOAD)
+$(FSDIR)/debian/source/include-binaries fsprep: $(ROOT)/prepfreeswitch.sh $(BUILDSOURCE)/$(FSFILENAME) $(FSDEPDOWNLOAD)
 	./prepfreeswitch.sh $(BUILDSOURCE) $(FSPREFIX) $(BUILDSOURCE)/$(FSFILENAME)
 	./genchangelog.sh freeswitch "$(FSVERSION)-$(FSREV)" $(FSDIR)
 	for p in $(FSDEPS); do cp $(DOWNLOADS)/$$p $(FSDIR)/libs; echo libs/$$p >> $(FSDIR)/debian/source/include-binaries; done
 
 .PHONY: patches
-patches $(FSDIR)/debian/patches/series: $(FSDIR)/debian/source/include-binaries $(FSPATCHESDEST) fixfsvers.sh
+patches $(FSDIR)/debian/patches/series: $(FSDIR)/debian/source/include-binaries $(FSPATCHESDEST) $(ROOT)/fixfsvers.sh
 	rm -f $(FSDIR)/debian/patches/series && for p in $(FSPATCHES); do echo $$p >> $(FSDIR)/debian/patches/series; done
 	./fixfsvers.sh $(FSDIR) $(FSMAJOR) $(FSMINOR) $(FSMICRO) $(FSREV)
 
@@ -54,21 +56,21 @@ $(FSDIR)/debian/patches/:
 $(FSDEPDOWNLOAD): | $(DOWNLOADS)
 	wget -nc -O $(@) http://files.freeswitch.org/downloads/libs/$(@F)
 	
-## Some makefile magic to glob all the freeswitch patches into place
-.SECONDEXPANSION:
-$(FSPATCHESDEST): patches/freeswitch/$$(@F) | $(FSDIR)/debian/patches/
+$(DESTPATCHDIR)/%.patch: $(SRCPATCHDIR)/%.patch | $(FSDIR)/debian/patches/
 	cp $(<) $(@)
 
 ## This is the raw file, from github.
 $(DOWNLOADS)/$(FSFILENAME): | $(DOWNLOADS)
 	wget -O $(@) $(FSURL)
 
-## Take all the debs we have previously build, and stick them in a tarball,
-## which we inject into the container
-fsdocker/alldebs.tar.gz: $(addprefix $(DEBDEST)/,$(SRCDEBS))
-	tar -C $(DEBDEST) -zcvf $@ $(SRCDEBS) || rm -f $@ 
+## Take all the debs we have previously built, and stick them in a tarball,
+## which we inject into the container. Explicitly delete the tarball if
+## files are missing, so make doesn't get confused
+ALLDEBS=$(addprefix $(DEBDEST)/,$(SRCDEBS))
+$(ROOT)/fsdocker/alldebs.tar.gz: $(ALLDEBS)
+	tar -C $(DEBDEST) -zcvf $@ $(SRCDEBS) || ( rm -f $@; exit 1 )
 
-$(FSDOCKERTAG): $(BASEDOCKERTAG) fsdocker/alldebs.tar.gz $(wildcard fsdocker/*)
+$(FSDOCKERTAG): $(BASEDOCKERTAG) $(ROOT)/fsdocker/alldebs.tar.gz $(wildcard $(ROOT)/fsdocker/*)
 	@echo Starting $(@)
 	docker build --build-arg VERSION=$(VERSION) -t fsdocker:$(VERSION) fsdocker
 	touch $(@)

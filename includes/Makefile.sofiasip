@@ -4,14 +4,6 @@
 ## lib-sofia-sip
 ##
 
-SOFIAURL=https://github.com/freeswitch/sofia-sip/tarball/$(SOFIAHASH)
-SOFIAFILENAME=$(SOFIAPREFIX).tar.gz
-SOFIASHORT=$(shell echo $(SOFIAHASH) | cut -c1-7)
-SOFIAPREFIX=freeswitch-sofia-sip-$(SOFIASHORT)
-SOFIATAG=$(SOFIAVERSION)-$(SOFIARELEASE)
-SOFIADEB=libsofia-sip-ua0_$(SOFIATAG)_amd64.deb
-SOFIADEBS=$(SOFIADEB) libsofia-sip-ua-dev_$(SOFIATAG)_amd64.deb libsofia-sip-ua-glib3_$(SOFIATAG)_amd64.deb libsofia-sip-ua-glib-dev_$(SOFIATAG)_amd64.deb sofia-sip-bin_$(SOFIATAG)_amd64.deb
-
 .PHONY: libsofia
 libsofia: setup $(DEBDEST)/$(SOFIADEB)
 
