@@ -7,7 +7,7 @@
 FSDIR=$(BUILDSOURCE)/$(FSPREFIX)
 
 .PHONY: freeswitch fsdocker force
-freeswitch: setup  $(DEBDEST)/$(FSMAINDEB)
+freeswitch: setup $(DEBDEST)/$(FSMAINDEB)
 
 fsdocker: $(FSDOCKERTAG) fsprep patches
 	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX)/debian fsdocker:$(VERSION) ./bootstrap.sh -chirsute
@@ -36,8 +36,8 @@ FSPATCHESDEST=$(addprefix $(DESTPATCHDIR)/,$(FSPATCHES))
 FSDEPDOWNLOAD=$(addprefix $(DOWNLOADS)/,$(FSDEPS))
 
 .PHONY: fsprep
-$(FSDIR)/debian/source/include-binaries fsprep: $(ROOT)/prepfreeswitch.sh $(BUILDSOURCE)/$(FSFILENAME) $(FSDEPDOWNLOAD)
-	./prepfreeswitch.sh $(BUILDSOURCE) $(FSPREFIX) $(BUILDSOURCE)/$(FSFILENAME)
+$(FSDIR)/debian/source/include-binaries fsprep: $(ROOT)/prepfreeswitch.sh $(BUILDSOURCE)/$(FSBUILDFILENAME) $(FSDEPDOWNLOAD)
+	./prepfreeswitch.sh $(BUILDSOURCE) $(FSPREFIX) $(BUILDSOURCE)/$(FSBUILDFILENAME)
 	./genchangelog.sh freeswitch "$(FSVERSION)-$(FSREV)" $(FSDIR)
 	for p in $(FSDEPS); do cp $(DOWNLOADS)/$$p $(FSDIR)/libs; echo libs/$$p >> $(FSDIR)/debian/source/include-binaries; done
 
@@ -59,16 +59,28 @@ $(FSDEPDOWNLOAD): | $(DOWNLOADS)
 $(DESTPATCHDIR)/%.patch: $(SRCPATCHDIR)/%.patch | $(FSDIR)/debian/patches/
 	cp $(<) $(@)
 
-## This is the raw file, from github.
+## This is the raw file from github, and is freeswitch_$(FSHASH).tar.gz
+## so we can invalidate freeswitch_$FSVERS_orig.tar.gz when our checkout
+## changes
 $(DOWNLOADS)/$(FSFILENAME): | $(DOWNLOADS)
 	wget -O $(@) $(FSURL)
+
+$(BUILDSOURCE)/$(FSBUILDFILENAME): $(DOWNLOADS)/$(FSFILENAME)
+	cp $< $@
 
 ## Take all the debs we have previously built, and stick them in a tarball,
 ## which we inject into the container. Explicitly delete the tarball if
 ## files are missing, so make doesn't get confused
 ALLDEBS=$(addprefix $(DEBDEST)/,$(SRCDEBS))
+
+## The sort is there to remove duplicates that may have accidentally
+## snuck into SRCDEBS
 $(ROOT)/fsdocker/alldebs.tar.gz: $(ALLDEBS)
-	tar -C $(DEBDEST) -zcvf $@ $(SRCDEBS) || ( rm -f $@; exit 1 )
+	tar -C $(DEBDEST) -zcvf $@ $(sort $(SRCDEBS)) || ( rm -f $@; exit 1 )
+
+## Debugging for alldebs creation
+alldebs: $(ROOT)/fsdocker/alldebs.tar.gz
+	tar tvf $<
 
 $(FSDOCKERTAG): $(BASEDOCKERTAG) $(ROOT)/fsdocker/alldebs.tar.gz $(wildcard $(ROOT)/fsdocker/*)
 	@echo Starting $(@)
