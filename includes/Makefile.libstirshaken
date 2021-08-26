@@ -21,6 +21,9 @@ $(BUILDSOURCE)/$(LIBSSDEB): $(LIBSSDOCKERTAG) $(BUILDSOURCE)/$(LIBSSFILENAME)
 
 LIBSSREQS=$(LIBKSDEB) $(LIBJWTDEB) $(LIBJWTDEVDEB) 
 
+$(addprefix $(ROOT)/libssdocker/,$(LIBSSREQS)): $(addprefix $(DEBDEST)/,$(LIBSSREQS))
+	cp $(DEBDEST)/$(@F) $(@)
+
 $(LIBSSDOCKERTAG): $(BASEDOCKERTAG) $(addprefix $(ROOT)/libssdocker/,$(LIBSSREQS)) $(wildcard $(ROOT)/libssdocker/*)
 	@echo Starting $(@)
 	docker build --build-arg VERSION=$(VERSION) -t libssdocker:$(VERSION) libssdocker
