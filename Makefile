@@ -1,5 +1,5 @@
 ## If you change this version, make sure you run 'make clean'
-VERSION=20210802
+VERSION=20210826
 RELEASE=1
 
 ROOT:=$(shell pwd)
@@ -7,12 +7,6 @@ BUILDDIR:=$(ROOT)/build
 DOWNLOADS:=$(ROOT)/downloads
 DEBDEST:=$(BUILDDIR)/debs
 
-include Makefile.common
-
-# Configure githash, releases etc in here
-include Makefile.settings
-
-MAKEFILES := common settings
 
 .PHONY: help shell setup debs clean distclean
 
@@ -26,6 +20,13 @@ help:
 	@echo "  'make stage1'    - Build all the debs required to build freeswitch"
 	@echo "  'make fsdocker'  - Build stage1, build the fscontainer using those debs"
 	@echo "  'make freeswitch'- Build freeswitch using the fsdocker container"
+
+include Makefile.common
+
+# Configure githash, releases etc in here
+include Makefile.settings
+
+MAKEFILES := common settings
 
 # Load all our associated makefiles
 include $(wildcard includes/Makefile.*)
