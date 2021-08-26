@@ -23,10 +23,10 @@ LIBJWTREL=4
 
 ## Git hash for libsofia-sip 
 ##   https://github.com/freeswitch/sofia-sip
-SOFIAHASH=fbab3b7b3d077105378585d75d61a0a9c6fb7a4e
+SOFIAHASH=afa7ebb814c8a3023aa75f0a350363df76659d67
 ## What version and release we are claiming it is.
-SOFIAVERSION=1.13.4
-SOFIARELEASE=5
+SOFIAVERSION=1.13.5
+SOFIARELEASE=1
 
 ## Git hash for freeswitch
 ##   https://github.com/signalwire/freeswitch
