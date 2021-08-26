@@ -30,12 +30,12 @@ SOFIARELEASE=1
 
 ## Git hash for freeswitch
 ##   https://github.com/signalwire/freeswitch
-FSHASH=d20dbb76a6f2f627a0bbc31b25236d8c5f20dad0
+FSHASH=dd2411336fbb17be120801f8d26cfed01e0e6740
 ## What version of freeswitch we are claiming it is
 FSMAJOR=1
 FSMINOR=10
 FSMICRO=7
-FSREV=$(VERSION)~003
+FSREV=$(VERSION)~004
 HREV=
 FSVERSION=$(FSMAJOR).$(FSMINOR).$(FSMICRO)
 
