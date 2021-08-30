@@ -23,5 +23,7 @@ sed -i 's/python-dev/python2-dev/' $FSDIR/debian/control-modules
 sed -i '/avoid_mods=(/a  languages/mod_python\n  event_handlers/mod_rayo\n  endpoints/mod_skinny' $FSDIR/debian/bootstrap.sh
 #echo "Switching to a single job for debugging"
 #sed -ri 's/make -j..NJOBS./make -j1/' $FSDIR/debian/rules
+echo "Stopping dpkg from restarting freeswitch on upgrades"
+sed -r -i 's/dh_systemd_start.+-pfreeswitch-systemd/dh_systemd_start --no-restart-after-upgrade --no-restart-on-upgrade -pfreeswitch-systemd/' $FSDIR/debian/rules
 
 
