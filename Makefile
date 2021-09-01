@@ -1,6 +1,13 @@
 ## If you change this version, make sure you run 'make clean'
-VERSION=20210826
+VERSION=20210902
 RELEASE=1
+
+## This SHOULD be in Makefile.settings but it's the most
+## common thing to change. This is used as the end part of the
+## debian version, after the major.minor.rel fields are added. You
+## normally want to set this back to zero after you bump VERSION
+## above.
+FSREV=$(VERSION)~001
 
 ROOT:=$(shell pwd)
 BUILDDIR:=$(ROOT)/build
