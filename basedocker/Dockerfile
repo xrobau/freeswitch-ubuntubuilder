@@ -20,7 +20,7 @@ RUN apt-get -y install build-essential autoconf libtool libtool-bin vim xz-utils
 	dpatch doxygen autotools-dev xsltproc libxml2-utils docbook-xsl docbook \
 	xz-utils pkgconf uuid uuid-dev cmake libssl-dev libcurl4-openssl-dev \
 	libjansson-dev libjansson4 software-properties-common check libglib2.0-dev \
-	graphviz
+	graphviz libuuid1
 
 # These are all required to build freeswitch later, but there's no need to redownload
 # them every time, so grab them now.
