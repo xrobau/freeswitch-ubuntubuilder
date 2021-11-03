@@ -15,7 +15,7 @@ BASEDOCKERTAG=$(ROOT)/.base_docker_build
 ## a default freeswitch config called fs.tar.gz. See the test
 ## makefile for how I do it, and you can figure it out from
 ## there. Sorry!
-TESTDOCKERTAG=$(BASE)/.test_docker_build
+TESTDOCKERTAG=$(ROOT)/.test_docker_build
 
 SDSPURL=https://github.com/freeswitch/spandsp/tarball/$(SPANDSPHASH)
 SDSPFILENAME=spandsp_$(SDSPVER).orig.tar.gz
@@ -35,7 +35,7 @@ LIBKSURL=https://github.com/signalwire/libks/tarball/$(LIBKSHASH)
 LIBKSFILENAME=libks-$(VERSION)-$(LIBKSSHORT).tar.gz
 LIBKSSHORT=$(shell echo $(LIBKSHASH) | cut -c1-7)
 LIBKSPREFIX=signalwire-libks-$(LIBKSSHORT)
-LIBKSDEB=libks_$(LIBKSVERS)-$(LIBKSREL)_hirsute_amd64.deb
+LIBKSDEB=libks_$(LIBKSVERS)-$(LIBKSREL)_impish_amd64.deb
 
 LIBSSURL=https://github.com/signalwire/libstirshaken/tarball/$(LIBSSHASH)
 LIBSSFILENAME=libstirshaken_$(LIBSSVERS).orig.tar.gz
@@ -43,7 +43,7 @@ LIBSSSHORT=$(shell echo $(LIBSSHASH) | cut -c1-7)
 LIBSSPREFIX=signalwire-libstirshaken-$(LIBSSSHORT)
 LIBSSDEB=libstirshaken1_$(LIBSSVERS)-$(LIBSSREL)_amd64.deb
 LIBSSDEVDEB=libstirshaken-dev_$(LIBSSVERS)-$(LIBSSREL)_amd64.deb
-LIBSSDOCKERTAG=$(BASE)/.libss_docker_build
+LIBSSDOCKERTAG=$(ROOT)/.libss_docker_build
 LIBSSDEBS=$(LIBSSDEB) $(LIBSSDEVDEB)
 
 FSURL=https://github.com/signalwire/freeswitch/tarball/$(FSHASH)
@@ -52,7 +52,7 @@ FSRELEASE=$(FSVERSION)-$(FSREV)
 FSFILENAME=freeswitch_$(FSHASH).tar.gz
 FSBUILDFILENAME=freeswitch_$(FSVERSION).orig.tar.gz
 FSPREFIX=signalwire-freeswitch-$(FSSHORT)
-FSDOCKERTAG=$(BASE)/.fs_docker_build
+FSDOCKERTAG=$(ROOT)/.fs_docker_build
 FSPATCHES=$(notdir $(wildcard patches/freeswitch/*))
 FSMAINDEB=freeswitch_$(FSRELEASE)_amd64.deb        
 

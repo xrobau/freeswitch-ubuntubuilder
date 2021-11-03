@@ -1,4 +1,4 @@
-FROM ubuntu:21.04
+FROM ubuntu:21.10
 
 ARG VERSION
 ENV VERSION=${VERSION}
@@ -27,7 +27,7 @@ RUN apt-get -y install build-essential autoconf libtool libtool-bin vim xz-utils
 RUN apt-get -y install libedit-dev libsqlite3-dev libtiff5-dev yasm libogg-dev libspeex-dev \
 	libspeexdsp-dev unixodbc-dev libpq-dev libncurses5-dev erlang-dev \
 	libtpl-dev libexpat1-dev libgdbm-dev libdb-dev bison libavformat-dev libswscale-dev
-RUN apt-get -y install libavresample-dev libopencv-dev libldns-dev libhiredis-dev ladspa-sdk \
+RUN apt-get -y install libopencv-dev libldns-dev libhiredis-dev ladspa-sdk \
 	libmemcached-dev libsoundtouch-dev libopencore-amrnb-dev libcodec2-dev libopus-dev \
 	libmariadb-dev libldap2-dev libasound2-dev portaudio19-dev libperl-dev
 RUN apt-get -y install librabbitmq-dev libsnmp-dev libmagickcore-dev libopusfile-dev libvorbis-dev \

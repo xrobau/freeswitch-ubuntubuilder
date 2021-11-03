@@ -26,4 +26,6 @@ sed -i '/avoid_mods=(/a  languages/mod_python\n  event_handlers/mod_rayo\n  endp
 echo "Stopping dpkg from restarting freeswitch on upgrades"
 sed -r -i 's/dh_systemd_start.+-pfreeswitch-systemd/dh_systemd_start --no-restart-after-upgrade --no-restart-on-upgrade -pfreeswitch-systemd/' $FSDIR/debian/rules
 
-
+echo "Disabling libav, it's missing in impish"
+sed -i 's/, libavresample-dev//' $FSDIR/debian/control*
+sed -i '/avoid_mods=(/a  event_handlers/mod_amqp applications/mod_av' $FSDIR/debian/bootstrap.sh
