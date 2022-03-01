@@ -48,6 +48,9 @@ RUN cd /usr/local && unzip docbook-xsl-snapshot.zip && rm -f docbook-xsl-snapsho
 RUN xmlcatalog --noout --add "delegateSystem" "https://cdn.docbook.org/release/xsl/current/" "file:///usr/local/docbook-xsl-snapshot/catalog.xml" /etc/xml/catalog
 RUN xmlcatalog --noout --add "delegateURI" "https://cdn.docbook.org/release/xsl/current/" "file:///usr/local/docbook-xsl-snapshot/catalog.xml" /etc/xml/catalog
 
+# Hack dh_builddeb to always use -Zxz
+RUN sed -i 's/"--build/"-Zxz", "--build/' /usr/bin/dh_builddeb
+
 WORKDIR /usr/local/build
 
 
