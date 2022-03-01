@@ -6,15 +6,15 @@ SDSPREL=42
 
 ## Git hash for libstirshaken 
 ##   https://github.com/signalwire/libstirshaken
-LIBSSHASH=348f741e87808fd671253666c973da9c5c715398
-LIBSSVERS=2021.11.02
+LIBSSHASH=637213c25eeb36a41942afa91dfbf842ba2582f3
+LIBSSVERS=2021.11.19
 LIBSSREL=1
 
 ## Git hash for libkitchensink
 ##   https://github.com/signalwire/libks
-LIBKSHASH=f43b85399f8fc840561566887e768fc877ba2583
-LIBKSVERS=1.7.1
-LIBKSREL=6
+LIBKSHASH=0e9ebc75812c2d73263d06a3ef11f7fedb762133
+LIBKSVERS=1.8.1
+LIBKSREL=2
 
 ## libjwt version
 ##   https://github.com/benmcollins/libjwt/archive
@@ -23,14 +23,14 @@ LIBJWTREL=4
 
 ## Git hash for libsofia-sip 
 ##   https://github.com/freeswitch/sofia-sip
-SOFIAHASH=41528402605d877b8e797f9def28b8acc93a8f9e
+SOFIAHASH=d022b09dc7c686bbe1f49d2e21aa059c61b05f31
 ## What version and release we are claiming it is.
-SOFIAVERSION=1.13.6
+SOFIAVERSION=1.13.7
 SOFIARELEASE=1
 
 ## Git hash for freeswitch
 ##   https://github.com/signalwire/freeswitch
-FSHASH=3c6ffc146fdfafdf6013ca5cd334b7917a1ad7f3
+FSHASH=4b580a07c40b3939c524bd1f2f0b2b8b40b5555c
 ## What version of freeswitch we are claiming it is
 FSMAJOR=1
 FSMINOR=10
