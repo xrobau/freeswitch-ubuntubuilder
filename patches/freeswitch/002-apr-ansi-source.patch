@@ -1,0 +1,16 @@
+If this is not defined, apr thinks it's being built on Darwin.
+I'm assuming something USED to define this, but now it's gone.
+
+
+diff -ur libs/apr.orig/configure.ac libs/apr/configure.ac
+--- a/libs/apr/configure.ac	2022-06-13 02:15:57.452672907 +0000
++++ b/libs/apr/configure.ac	2022-06-13 02:16:29.125262992 +0000
+@@ -20,7 +20,7 @@
+ sinclude(build/libtool.m4)
+ sinclude(build/ltsugar.m4)
+ 
+-CFLAGS="$CFLAGS $CONFIGURE_CFLAGS"
++CFLAGS="$CFLAGS $CONFIGURE_CFLAGS -D_ANSI_SOURCE"
+ CXXFLAGS="$CXXFLAGS $CONFIGURE_CXXFLAGS"
+ LDFLAGS="$LDFLAGS $CONFIGURE_LDFLAGS"
+ 

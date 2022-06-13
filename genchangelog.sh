@@ -3,9 +3,13 @@
 PKG=$1
 REL=$2
 DIR=$3
+DESC=$4
 TIMESTAMP=$(date '+%a, %d %b %Y %T -0000' --utc)
 
 DEST=$DIR/debian/changelog
+if [ ! "$DESC" ]; then
+	DESC=$(basename $DIR)
+fi
 
 if [ ! -e $DEST ]; then
 	echo $DEST does not exist

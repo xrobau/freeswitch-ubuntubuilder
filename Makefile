@@ -1,6 +1,10 @@
 ## If you change this version, make sure you run 'make clean'
-VERSION=20220301
+VERSION=20220613
 RELEASE=1
+
+## Set this to be the name of the Ubunt disto. It's used to tag
+## the versions correctly
+BUILDNAME=jammy
 
 ## This SHOULD be in Makefile.settings but it's the most
 ## common thing to change. This is used as the end part of the

@@ -16,6 +16,7 @@ $(BUILDSOURCE)/$(LIBSSDEB): $(LIBSSDOCKERTAG) $(BUILDSOURCE)/$(LIBSSFILENAME)
 	rm -rf $(BUILDSOURCE)/$(LIBSSPREFIX) && mkdir -p $(BUILDSOURCE) && cd $(BUILDSOURCE) && tar xf $(BUILDSOURCE)/$(LIBSSFILENAME)
 	sed -ri 's_(prefix=/usr)_\1 CFLAGS=-Wl,--allow-multiple-definition_' $(BUILDSOURCE)/$(LIBSSPREFIX)/debian/rules
 	sed 's/__VERSION__/$(LIBSSVERS)/' < libss_fix_version > $(BUILDSOURCE)/$(LIBSSPREFIX)/debian/patches/libss_fix_version && echo libss_fix_version > $(BUILDSOURCE)/$(LIBSSPREFIX)/debian/patches/series
+	for p in $(ROOT)/patches/libstirshaken/*; do cp $$p $(BUILDSOURCE)/$(LIBSSPREFIX)/debian/patches/ && echo $$(basename $$p) >> $(BUILDSOURCE)/$(LIBSSPREFIX)/debian/patches/series; done
 	./genchangelog.sh libstirshaken "$(LIBSSVERS)-$(LIBSSREL)" $(BUILDSOURCE)/$(LIBSSPREFIX)
 	docker run --rm $(VOLUMES) -it  -w /usr/local/build/SOURCES/$(LIBSSPREFIX) libssdocker:$(VERSION) dpkg-buildpackage -us -uc
 

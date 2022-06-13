@@ -6,18 +6,18 @@
 
 FSDIR=$(BUILDSOURCE)/$(FSPREFIX)
 
-.PHONY: freeswitch fsdocker force
+.PHONY: freeswitch fsdocker fspatches force
 freeswitch: setup $(DEBDEST)/$(FSMAINDEB)
 
-fsdocker: $(FSDOCKERTAG) fsprep patches
-	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX)/debian fsdocker:$(VERSION) ./bootstrap.sh -cimpish
+fsdocker: $(FSDOCKERTAG) fsprep fspatches
+	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX)/debian fsdocker:$(VERSION) ./bootstrap.sh -c$(BUILDNAME)
 	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) bash
 
 fsshell:
 	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) bash
 
 .PHONY: fsforce
-fsforce: patches freeswitch
+fsforce: fspatches freeswitch
 
 $(DEBDEST)/freeswitch%.deb $(DEBDEST)/libfreeswitch%:
 	cp $(BUILDSOURCE)/$(@F) $@
@@ -26,7 +26,7 @@ $(DEBDEST)/$(FSMAINDEB): $(BUILDSOURCE)/$(FSMAINDEB)
 	cp $< $@
 
 $(BUILDSOURCE)/$(FSMAINDEB): $(FSDOCKERTAG) $(FSDIR)/debian/patches/series
-	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX)/debian fsdocker:$(VERSION) ./bootstrap.sh -cimpish
+	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX)/debian fsdocker:$(VERSION) ./bootstrap.sh -c$(BUILDNAME)
 	@echo dpkg-buildpackage -us -uc
 	@true && docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) dpkg-buildpackage -us -uc
 	@true || docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) bash
@@ -44,8 +44,8 @@ $(FSDIR)/debian/source/include-binaries fsprep: $(ROOT)/prepfreeswitch.sh $(BUIL
 	./genchangelog.sh freeswitch "$(FSVERSION)-$(FSREV)" $(FSDIR)
 	for p in $(FSDEPS); do cp $(DOWNLOADS)/$$p $(FSDIR)/libs; echo libs/$$p >> $(FSDIR)/debian/source/include-binaries; done
 
-.PHONY: patches
-patches $(FSDIR)/debian/patches/series: $(FSDIR)/debian/source/include-binaries $(FSPATCHESDEST) $(ROOT)/fixfsvers.sh
+.PHONY: fspatches
+fspatches $(FSDIR)/debian/patches/series: $(FSDIR)/debian/source/include-binaries $(FSPATCHESDEST) $(ROOT)/fixfsvers.sh
 	rm -f $(FSDIR)/debian/patches/series && for p in $(FSPATCHES); do echo $$p >> $(FSDIR)/debian/patches/series; done
 	./fixfsvers.sh $(FSDIR) $(FSMAJOR) $(FSMINOR) $(FSMICRO) $(FSREV)
 

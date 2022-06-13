@@ -1,13 +1,13 @@
 ## Things to change
 ##
-SPANDSPHASH=c3e87e27c2110e75083d30fbd57b2bc37fb06078
+SPANDSPHASH=e59ca8fb8b1591e626e6a12fdc60a2ebe83435ed
 SDSPVER=3.0.0
-SDSPREL=42
+SDSPREL=43
 
 ## Git hash for libstirshaken 
 ##   https://github.com/signalwire/libstirshaken
-LIBSSHASH=637213c25eeb36a41942afa91dfbf842ba2582f3
-LIBSSVERS=2021.11.19
+LIBSSHASH=85bf3036f74c4b768cce630423bb05cf424cb735
+LIBSSVERS=2022.04.23
 LIBSSREL=1
 
 ## Git hash for libkitchensink
@@ -30,7 +30,7 @@ SOFIARELEASE=1
 
 ## Git hash for freeswitch
 ##   https://github.com/signalwire/freeswitch
-FSHASH=4b580a07c40b3939c524bd1f2f0b2b8b40b5555c
+FSHASH=2d41d91b0968dc0beb294b013359e94a814b0b70
 ## What version of freeswitch we are claiming it is
 FSMAJOR=1
 FSMINOR=10

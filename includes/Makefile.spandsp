@@ -14,6 +14,7 @@ $(addprefix $(DEBDEST)/,$(SDSPDEBS)): $(addprefix $(BUILDSOURCE)/,$(SDSPDEBS)) |
 
 $(addprefix $(BUILDSOURCE)/,$(SDSPDEBS)): $(BUILDSOURCE)/$(SDSPFILENAME) $(BASEDOCKERTAG)
 	rm -rf $(BUILDSOURCE)/$(SDSPPREFIX) && mkdir -p $(BUILDSOURCE) && cd $(BUILDSOURCE) && tar xf $<
+	./genchangelog.sh spandsp "$(SDSPVER)-$(SDSPREL)" $(BUILDSOURCE)/$(SDSPPREFIX) "Git hash $(SPANDSPHASH)"
 	docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(SDSPPREFIX) basedocker:$(VERSION) dpkg-buildpackage -us -uc
 
 $(DOWNLOADS)/$(SDSPFILENAME): | $(DOWNLOADS)

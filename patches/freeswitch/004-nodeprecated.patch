@@ -1,0 +1,10 @@
+--- a/configure.ac	2022-06-13 03:16:49.055545278 +0000
++++ b/configure.ac	2022-06-13 03:19:07.586940423 +0000
+@@ -1072,6 +1072,7 @@
+ AC_MSG_RESULT($ac_cv_gcc_declaration_after_statement)
+ if test x"$ac_cv_gcc_declaration_after_statement" = xyes; then
+     APR_ADDTO(SWITCH_ANSI_CFLAGS, -Wdeclaration-after-statement)
++    APR_ADDTO(SWITCH_ANSI_CFLAGS, -Wno-deprecated-declarations)
+ fi
+ CFLAGS="$saved_CFLAGS"
+ 

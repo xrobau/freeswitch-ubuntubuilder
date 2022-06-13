@@ -35,7 +35,7 @@ LIBKSURL=https://github.com/signalwire/libks/tarball/$(LIBKSHASH)
 LIBKSFILENAME=libks-$(VERSION)-$(LIBKSSHORT).tar.gz
 LIBKSSHORT=$(shell echo $(LIBKSHASH) | cut -c1-7)
 LIBKSPREFIX=signalwire-libks-$(LIBKSSHORT)
-LIBKSDEB=libks_$(LIBKSVERS)-$(LIBKSREL)_impish_amd64.deb
+LIBKSDEB=libks_$(LIBKSVERS)-$(LIBKSREL)_$(BUILDNAME)_amd64.deb
 
 LIBSSURL=https://github.com/signalwire/libstirshaken/tarball/$(LIBSSHASH)
 LIBSSFILENAME=libstirshaken_$(LIBSSVERS).orig.tar.gz

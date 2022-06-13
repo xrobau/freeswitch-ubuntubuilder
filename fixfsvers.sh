@@ -11,6 +11,8 @@ MINOR=$3
 MICRO=$4
 REV=$5
 
+PINC=/usr/include/python3.10
+
 VER=${MAJOR}.${MINOR}.${MICRO}-${REV}
 
 if [ ! -e "$CONFFILE" ]; then
@@ -29,6 +31,7 @@ sed -e "s|\(AC_SUBST(SWITCH_VERSION_MAJOR, \[\).*\(\])\)|\1${MAJOR}\2|" \
 	-e "s|\(AC_SUBST(SWITCH_VERSION_MINOR, \[\).*\(\])\)|\1${MINOR}\2|" \
 	-e "s|\(AC_SUBST(SWITCH_VERSION_MICRO, \[\).*\(\])\)|\1${MICRO}-${REV}\2|" \
 	-e "s|\(AC_INIT(\[freeswitch\], \[\).*\(\], bugs@freeswitch.org)\)|\1${VER}\2|" \
+	-e "/^APR_REMOVEFROM/a APR_ADDTO(CPPFLAGS, -I$PINC)\nAPR_ADDTO(SWITCH_AM_CFLAGS, -I$PINC)" \
 	< ${CONFFILE}.orig > ${CONFFILE}
 
 cd $BASE
