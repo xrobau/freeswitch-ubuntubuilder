@@ -1,5 +1,5 @@
 ## If you change this version, make sure you run 'make clean'
-VERSION=20220613
+VERSION=20220815
 RELEASE=1
 
 ## Set this to be the name of the Ubunt disto. It's used to tag
@@ -11,7 +11,7 @@ BUILDNAME=jammy
 ## debian version, after the major.minor.rel fields are added. You
 ## normally want to set this back to zero after you bump VERSION
 ## above.
-FSREV=$(VERSION)~001
+FSREV=$(VERSION)~002
 
 ROOT:=$(shell pwd)
 BUILDDIR:=$(ROOT)/build
