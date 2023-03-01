@@ -1,5 +1,5 @@
 ## If you change this version, make sure you run 'make clean'
-VERSION=20220815
+VERSION=20230301
 RELEASE=1
 
 ## Set this to be the name of the Ubunt disto. It's used to tag
@@ -11,7 +11,7 @@ BUILDNAME=jammy
 ## debian version, after the major.minor.rel fields are added. You
 ## normally want to set this back to zero after you bump VERSION
 ## above.
-FSREV=$(VERSION)~002
+FSREV=$(VERSION)~001
 
 ROOT:=$(shell pwd)
 BUILDDIR:=$(ROOT)/build
@@ -45,7 +45,7 @@ include $(wildcard includes/Makefile.*)
 shell: setup $(BASEDOCKERTAG)
 	docker run --rm $(VOLUMES) -it basedocker:$(VERSION) bash
 
-setup: | /usr/local/ccache/ccache.conf $(BUILDSOURCE) $(BUILDDIR) $(DOWNLOADS) $(DEBDEST)
+setup: | /usr/local/ccache/ccache.conf $(BUILDDEPS) $(BUILDSOURCE) $(BUILDDIR) $(DOWNLOADS) $(DEBDEST)
 
 
 /usr/local/ccache/ccache.conf: ccache.conf
@@ -60,7 +60,7 @@ distclean: clean
 stage1: $(addprefix $(DEBDEST)/,$(SRCDEBS))
 	@echo Stage 1 debs complete, build $(SRCDEBS)
 
-debs: stage1 freeswitch
+debs: setup stage1 freeswitch
 
 libssdocker/%.deb fsdocker/%.deb: $(DEBDEST)/%.deb
 	cp $< $@

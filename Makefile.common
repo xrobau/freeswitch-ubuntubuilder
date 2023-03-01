@@ -70,3 +70,9 @@ SRCDEBS=$(SDSPDEBS) $(SOFIADEBS) $(LIBJWTDEBS) $(LIBKSDEB) $(LIBSSDEBS)
 
 ## This is used in a bunch of places
 TIMESTAMP=$(shell date '+%a, %d %b %Y %T -0000' --utc)
+
+BUILDREQS=/usr/bin/unzip
+
+/usr/bin/unzip:
+	apt-get -y install unzip
+

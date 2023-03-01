@@ -1,41 +1,41 @@
 ## Things to change
 ##
 ##  https://github.com/freeswitch/spandsp
-SPANDSPHASH=e59ca8fb8b1591e626e6a12fdc60a2ebe83435ed
+SPANDSPHASH=67d2455efe02e7ff0d897f3fd5636fed4d54549e
 SDSPVER=3.0.0
-SDSPREL=44
+SDSPREL=45
 
 ## Git hash for libstirshaken 
 ##   https://github.com/signalwire/libstirshaken
-LIBSSHASH=720a17a4787cf9013423610a07b2157250fe953f
-LIBSSVERS=2022.07.05
+LIBSSHASH=5e06ce95965658f3e51f4820938347b1c593cf39
+LIBSSVERS=2023.01.19
 LIBSSREL=1
 
 ## Git hash for libkitchensink
 ##   https://github.com/signalwire/libks
-LIBKSHASH=25723366532d2244c362988748c87512fcafde4a
-LIBKSVERS=1.8.1
-LIBKSREL=2
+LIBKSHASH=81dfcf5e44f10149390567019285397f9b683fc4
+LIBKSVERS=1.8.3
+LIBKSREL=1
 
 ## libjwt version
 ##   https://github.com/benmcollins/libjwt/archive
-LIBJWTVERS=1.13.1
-LIBJWTREL=5
+LIBJWTVERS=1.15.2
+LIBJWTREL=1
 
 ## Git hash for libsofia-sip 
 ##   https://github.com/freeswitch/sofia-sip
-SOFIAHASH=5830a3274f2c08d0cfb03db2341220718f0e6108
+SOFIAHASH=3f17604d0c427a276839ea96b6dc31d7da69d27c
 ## What version and release we are claiming it is.
-SOFIAVERSION=1.13.8
-SOFIARELEASE=1
+SOFIAVERSION=1.13.14
+SOFIARELEASE=2
 
 ## Git hash for freeswitch
 ##   https://github.com/signalwire/freeswitch
-FSHASH=db3dd53aa6a25a3beb821c054f208d2fd6ef02ac
+FSHASH=3307083f8b2e33a1af368521962673b7682feef2
 ## What version of freeswitch we are claiming it is
 FSMAJOR=1
 FSMINOR=10
-FSMICRO=8
+FSMICRO=9
 HREV=
 FSVERSION=$(FSMAJOR).$(FSMINOR).$(FSMICRO)
 ## Note that there's FSREV in Makefile which is used to update the
