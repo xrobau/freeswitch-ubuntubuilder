@@ -53,11 +53,9 @@ FSFILENAME=freeswitch_$(FSHASH).tar.gz
 FSBUILDFILENAME=freeswitch_$(FSVERSION).orig.tar.gz
 FSPREFIX=signalwire-freeswitch-$(FSSHORT)
 FSDOCKERTAG=$(ROOT)/.fs_docker_build
-FSPATCHES=$(notdir $(wildcard patches/freeswitch/*))
 FSMAINDEB=freeswitch_$(FSRELEASE)_amd64.deb        
 
 SOFIAURL=https://github.com/freeswitch/sofia-sip/tarball/$(SOFIAHASH)
-SOFIAFILENAME=$(SOFIAPREFIX).tar.gz
 SOFIASHORT=$(shell echo $(SOFIAHASH) | cut -c1-7)
 SOFIAPREFIX=freeswitch-sofia-sip-$(SOFIASHORT)
 SOFIATAG=$(SOFIAVERSION)-$(SOFIARELEASE)

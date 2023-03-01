@@ -11,7 +11,7 @@ BUILDNAME=jammy
 ## debian version, after the major.minor.rel fields are added. You
 ## normally want to set this back to zero after you bump VERSION
 ## above.
-FSREV=$(VERSION)~001
+FSREV=$(VERSION)~004
 
 ROOT:=$(shell pwd)
 BUILDDIR:=$(ROOT)/build

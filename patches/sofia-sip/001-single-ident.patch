@@ -1,0 +1,16 @@
+Fix duplicate Identity headers on INVITE.
+See https://github.com/freeswitch/sofia-sip/issues/206
+
+diff -ur freeswitch-sofia-sip-orig/libsofia-sip-ua/sip/sip_basic.c freeswitch-sofia-sip-fixed/libsofia-sip-ua/sip/sip_basic.c
+--- freeswitch-sofia-sip-orig/libsofia-sip-ua/sip/sip_basic.c	2023-02-20 16:19:29.000000000 +0000
++++ freeswitch-sofia-sip-fixed/libsofia-sip-ua/sip/sip_basic.c	2023-03-01 07:28:22.890683719 +0000
+@@ -2848,7 +2848,8 @@
+ static msg_update_f sip_identity_update;
+ 
+ msg_hclass_t sip_identity_class[] =
+-SIP_HEADER_CLASS(identity, "Identity", "", id_common, non_compact_append, identity);
++SIP_HEADER_CLASS(identity, "Identity", "", id_common, single, identity);
++// SIP_HEADER_CLASS(identity, "Identity", "", id_common, non_compact_append, identity);
+ 
+ issize_t sip_identity_d(su_home_t *home, sip_header_t *h, char *s, isize_t slen)
+ {

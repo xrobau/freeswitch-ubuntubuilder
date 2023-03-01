@@ -32,10 +32,10 @@ $(BUILDSOURCE)/$(FSMAINDEB): $(FSDOCKERTAG) $(FSDIR)/debian/patches/series
 	@true || docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) bash
 
 FSBINS=$(addprefix $(FSDIR)/libs/,$(FSDEPS))
-SRCPATCHDIR=$(ROOT)/patches/freeswitch
-FSPATCHES=$(notdir $(wildcard $(SRCPATCHDIR)/*.patch))
-DESTPATCHDIR=$(FSDIR)/debian/patches
-FSPATCHESDEST=$(addprefix $(DESTPATCHDIR)/,$(FSPATCHES))
+FSSRCPATCHDIR=$(ROOT)/patches/freeswitch
+FSPATCHES=$(notdir $(wildcard $(FSSRCPATCHDIR)/*.patch))
+FSDESTPATCHDIR=$(FSDIR)/debian/patches
+FSPATCHESDEST=$(addprefix $(FSDESTPATCHDIR)/,$(FSPATCHES))
 FSDEPDOWNLOAD=$(addprefix $(DOWNLOADS)/,$(FSDEPS))
 
 .PHONY: fsprep
@@ -59,7 +59,7 @@ $(FSDIR)/debian/patches/:
 $(FSDEPDOWNLOAD): | $(DOWNLOADS)
 	wget -nc -O $(@) http://files.freeswitch.org/downloads/libs/$(@F)
 	
-$(DESTPATCHDIR)/%.patch: $(SRCPATCHDIR)/%.patch | $(FSDIR)/debian/patches/
+$(FSDESTPATCHDIR)/%.patch: $(FSSRCPATCHDIR)/%.patch | $(FSDIR)/debian/patches/
 	cp $(<) $(@)
 
 ## This is the raw file from github, and is freeswitch_$(FSHASH).tar.gz

@@ -27,7 +27,8 @@ LIBJWTREL=1
 SOFIAHASH=3f17604d0c427a276839ea96b6dc31d7da69d27c
 ## What version and release we are claiming it is.
 SOFIAVERSION=1.13.14
-SOFIARELEASE=2
+SOFIARELEASE=4
+SOFIAFILENAME=sofia-sip_$(SOFIAVERSION).orig.tar.gz
 
 ## Git hash for freeswitch
 ##   https://github.com/signalwire/freeswitch
