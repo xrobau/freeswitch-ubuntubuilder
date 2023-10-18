@@ -6,6 +6,9 @@
 .PHONY: libss
 libss: setup $(DEBDEST)/$(LIBSSDEB)
 
+libss-shell: $(LIBSSDOCKERTAG)
+	docker run --rm $(VOLUMES) -it  -w /usr/local/build/SOURCES/$(LIBSSPREFIX) libssdocker:$(VERSION) bash
+
 $(DEBDEST)/$(LIBSSDEB) $(DEBDEST)/$(LIBSSDEVDEB): $(BUILDSOURCE)/$(LIBSSDEB)
 	cp $(BUILDSOURCE)/$(@F) $@
 
