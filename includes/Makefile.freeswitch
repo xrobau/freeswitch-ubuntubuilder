@@ -9,9 +9,10 @@ FSDIR=$(BUILDSOURCE)/$(FSPREFIX)
 .PHONY: freeswitch fsdocker fspatches force
 freeswitch: setup $(DEBDEST)/$(FSMAINDEB)
 
-fsdocker: $(FSDOCKERTAG) fsprep fspatches
-	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX)/debian fsdocker:$(VERSION) ./bootstrap.sh -c$(BUILDNAME)
-	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) bash
+#fsdocker: $(FSDOCKERTAG) fsprep fspatches
+fsdocker: fsprep fspatches
+	docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX)/debian fsdocker:$(VERSION) ./bootstrap.sh -c$(BUILDNAME)
+	docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) bash
 
 fsshell:
 	@docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(FSPREFIX) fsdocker:$(VERSION) bash
