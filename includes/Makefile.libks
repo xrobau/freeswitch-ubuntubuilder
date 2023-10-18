@@ -17,8 +17,6 @@ $(BUILDSOURCE)/$(LIBKSPREFIX)/$(LIBKSDEB): $(BASEDOCKERTAG) $(BUILDSOURCE)/$(LIB
 	cd $(BUILDSOURCE) && rm -rf $(LIBKSPREFIX) && tar xvf $(BUILDSOURCE)/$(LIBKSFILENAME)
 	# Disable changelog generation
 	sed -i 's/GIT_FOUND AND GZIP_CMD AND DATE_CMD/FALSE/' $(BUILDSOURCE)/$(LIBKSPREFIX)/CMakeLists.txt
-	# Install includes to correct place (/usr/include/libks instead of /usr/include/libks2/libks/)
-	sed -i -e 's!include/libks2>!include/libks>!' -e 's!DESTINATION include/libks2!DESTINATION include!' $(BUILDSOURCE)/$(LIBKSPREFIX)/CMakeLists.txt
 	docker run --rm $(VOLUMES) -it -e PACKAGE_RELEASE=$(LIBKSREL) -w /usr/local/build/SOURCES/$(LIBKSPREFIX) basedocker:$(VERSION) cmake . -DCMAKE_BUILD_TYPE=Release
 	docker run --rm $(VOLUMES) -it -e PACKAGE_RELEASE=$(LIBKSREL) -w /usr/local/build/SOURCES/$(LIBKSPREFIX) basedocker:$(VERSION) make package
 
