@@ -7,9 +7,15 @@ SDSPREL=46
 
 ## Git hash for libstirshaken 
 ##   https://github.com/signalwire/libstirshaken
-LIBSSHASH=6d99ee01ecb3d2930d5440b0e78e2cb3b1f3f326
+##
+## Note 2023-10-18:
+##   This is a commit from the `test` branch, not from master. This is due
+##   to https://github.com/signalwire/libstirshaken/issues/138 causing
+##   the tests to fail being compiled, because of a missing include path.
+##   This should be updated to master when this is merged.
+LIBSSHASH=65272ac2f4af05d9e25d04753e2ecbeddb23e6d0
 LIBSSVERS=2023.08.22
-LIBSSREL=1
+LIBSSREL=2
 
 ## Git hash for libkitchensink
 ##   https://github.com/signalwire/libks
