@@ -18,6 +18,13 @@ BUILDDIR:=$(ROOT)/build
 DOWNLOADS:=$(ROOT)/downloads
 DEBDEST:=$(BUILDDIR)/debs
 
+## GCC -march and -mtune params
+## See https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html for more information
+MARCH=westmere
+MTUNE=generic
+
+## If you do NOT want to tune the debs for a cpu type, comment out this line
+TUNEVARS=-march=$(MARCH) -mtune=$(MTUNE)
 
 .PHONY: help shell setup debs clean distclean
 

@@ -7,9 +7,10 @@
 .PHONY: base
 base: setup $(BASEDOCKERTAG)
 
-$(BASEDOCKERTAG): $(ROOT)/basedocker/docbook-xsl-snapshot.zip $(ROOT)/basedocker/ccache.conf $(wildcard $(ROOT)/basedocker/*)
+
+$(BASEDOCKERTAG): $(ROOT)/basedocker/docbook-xsl-snapshot.zip $(ROOT)/basedocker/ccache.conf $(wildcard $(ROOT)/basedocker/*) $(ROOT)/Makefile
 	@echo Starting $(@)
-	docker build --build-arg VERSION=$(VERSION) -t basedocker:$(VERSION) basedocker
+	docker build --build-arg VERSION=$(VERSION) --build-arg 'CPUTUNE=$(TUNEVARS)' -t basedocker:$(VERSION) basedocker
 	touch $(@)
 
 $(ROOT)/basedocker/%.zip: $(DOWNLOADS)/%.zip

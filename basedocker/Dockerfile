@@ -51,6 +51,11 @@ RUN xmlcatalog --noout --add "delegateURI" "https://cdn.docbook.org/release/xsl/
 # Hack dh_builddeb to always use -Zxz
 RUN sed -i 's/"--build/"-Zxz", "--build/' /usr/bin/dh_builddeb
 
+ARG CPUTUNE
+# This outputs to stdout so the cache will be invalidated when it changes.
+RUN echo "CPUTune set to ${CPUTUNE}"
+RUN if [ "${CPUTUNE}" ]; then echo "APPEND CFLAGS ${CPUTUNE}\nAPPEND CXXFLAGS ${CPUTUNE}\n" > /etc/dpkg/buildflags.conf; fi
+
 WORKDIR /usr/local/build
 
 
