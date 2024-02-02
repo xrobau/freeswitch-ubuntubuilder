@@ -1,5 +1,5 @@
 ## If you change this version, make sure you run 'make clean'
-VERSION=20231017
+VERSION=20240202
 RELEASE=1
 
 ## Set this to be the name of the Ubunt disto. It's used to tag

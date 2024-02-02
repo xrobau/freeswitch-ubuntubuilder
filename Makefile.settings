@@ -1,14 +1,14 @@
 ## Things to change
 ##
 ##  https://github.com/freeswitch/spandsp
-SPANDSPHASH=df1282eb9af538ab1aadb6d66146e258451d4fe4
+SPANDSPHASH=7b0b8cf3d42b725405bcc63145de5e280265ce4e
 SDSPVER=3.0.0
-SDSPREL=46
+SDSPREL=47
 
 ## Git hash for libstirshaken 
 ##   https://github.com/signalwire/libstirshaken
 ##
-## Note 2023-10-18:
+## Note 2023-10-18: (Still true 2024-02-02)
 ##   This is a commit from the `test` branch, not from master. This is due
 ##   to https://github.com/signalwire/libstirshaken/issues/138 causing
 ##   the tests to fail being compiled, because of a missing include path.
@@ -19,30 +19,30 @@ LIBSSREL=2
 
 ## Git hash for libkitchensink
 ##   https://github.com/signalwire/libks
-LIBKSHASH=6a4bc398723584af60e6947a3dfd7235490cf66d
-LIBKSVERS=2.0.2
+LIBKSHASH=2653d516cc485d748b6ef45a2a614d494fdd44ac
+LIBKSVERS=2.0.3
 LIBKSREL=2
 
 ## libjwt version
-##   https://github.com/benmcollins/libjwt/archive
+##   https://github.com/benmcollins/libjwt
 LIBJWTVERS=1.15.3
 LIBJWTREL=1
 
 ## Git hash for libsofia-sip 
 ##   https://github.com/freeswitch/sofia-sip
-SOFIAHASH=563fa31b49d6a7b1b698ca261e07ad9c2b0a8e71
+SOFIAHASH=aa96cbcaf9796791b7d5b5928c08b3da44623e0e
 ## What version and release we are claiming it is.
-SOFIAVERSION=1.13.16
+SOFIAVERSION=1.13.17
 SOFIARELEASE=2
 SOFIAFILENAME=sofia-sip_$(SOFIAVERSION).orig.tar.gz
 
 ## Git hash for freeswitch
 ##   https://github.com/signalwire/freeswitch
-FSHASH=f1fb05214e4f427dcf922f531431ab649cf0622b
+FSHASH=9df3076f29a52a690ebd25b1972a8b97d55442e0
 ## What version of freeswitch we are claiming it is
 FSMAJOR=1
 FSMINOR=10
-FSMICRO=10
+FSMICRO=11
 HREV=
 FSVERSION=$(FSMAJOR).$(FSMINOR).$(FSMICRO)
 ## Note that there's FSREV in Makefile which is used to update the

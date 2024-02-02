@@ -19,7 +19,13 @@ $(addprefix $(BUILDSOURCE)/,$(SDSPDEBS)): $(BUILDSOURCE)/$(SDSPFILENAME) $(BASED
 	mkdir -p $(SDSPPDEST); for p in $(ROOT)/patches/spandsp/*; do cp $$p $(SDSPPDEST)/ && echo $$(basename $$p) >> $(SDSPPDEST)/series; done
 	docker run --rm $(VOLUMES) -it -w /usr/local/build/SOURCES/$(SDSPPREFIX) basedocker:$(VERSION) dpkg-buildpackage -us -uc
 
-$(DOWNLOADS)/$(SDSPFILENAME): | $(DOWNLOADS)
+# We tag the filename with the hash, but remove it for the build. This
+# overrides the cp in common
+$(BUILDSOURCE)/$(SDSPFILENAME): $(DOWNLOADS)/$(SDSPFULLFILENAME) | $(BUILDSOURCE)
+	@echo 'Override copying $< to $@'
+	cp $< $@
+
+$(DOWNLOADS)/$(SDSPFULLFILENAME): | $(DOWNLOADS)
 	wget $(SDSPURL) -O $(@)
 ##
 ##

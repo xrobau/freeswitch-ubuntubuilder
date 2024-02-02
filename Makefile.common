@@ -18,8 +18,9 @@ BASEDOCKERTAG=$(ROOT)/.base_docker_build
 TESTDOCKERTAG=$(ROOT)/.test_docker_build
 
 SDSPURL=https://github.com/freeswitch/spandsp/tarball/$(SPANDSPHASH)
-SDSPFILENAME=spandsp_$(SDSPVER).orig.tar.gz
 SDSPSHORT=$(shell echo $(SPANDSPHASH) | cut -c1-7)
+SDSPFULLFILENAME=spandsp_$(SDSPVER)_$(SDSPSHORT).orig.tar.gz
+SDSPFILENAME=spandsp_$(SDSPVER).orig.tar.gz
 SDSPPREFIX=freeswitch-spandsp-$(SDSPSHORT)
 SDSPREL=42
 SDSPDEBS=libspandsp3_$(SDSPVER)-$(SDSPREL)_amd64.deb libspandsp3-dev_$(SDSPVER)-$(SDSPREL)_amd64.deb
