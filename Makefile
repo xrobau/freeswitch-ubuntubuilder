@@ -1,10 +1,10 @@
 ## If you change this version, make sure you run 'make clean'
-VERSION=20240202
+VERSION=20240916
 RELEASE=1
 
 ## Set this to be the name of the Ubunt disto. It's used to tag
 ## the versions correctly
-BUILDNAME=jammy
+BUILDNAME=noble
 
 ## This SHOULD be in Makefile.settings but it's the most
 ## common thing to change. This is used as the end part of the

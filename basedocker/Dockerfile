@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:noble
 
 ARG VERSION
 ENV VERSION=${VERSION}
@@ -17,7 +17,7 @@ ENV CCACHE_CONFIGPATH=/usr/local/ccache/ccache.conf
 # Standard packages
 RUN apt-get -y install build-essential autoconf libtool libtool-bin vim xz-utils \
 	devscripts cowbuilder git screen ccache debhelper libtiff-dev libjpeg-dev \
-	dpatch doxygen autotools-dev xsltproc libxml2-utils docbook-xsl docbook \
+	doxygen autotools-dev xsltproc libxml2-utils docbook-xsl docbook \
 	xz-utils pkgconf uuid uuid-dev cmake libssl-dev libcurl4-openssl-dev \
 	libjansson-dev libjansson4 software-properties-common check libglib2.0-dev \
 	graphviz libuuid1
@@ -36,8 +36,8 @@ RUN apt-get -y install librabbitmq-dev libsnmp-dev libmagickcore-dev libopusfile
 	flite1-dev libgdbm-compat-dev autoconf-archive
 
 # This is run last to make sure everything is set back to python2, from python3
-RUN apt-get -y install python2-dev dh-python
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python2 1
+#RUN apt-get -y install python2-dev dh-python
+#RUN update-alternatives --install /usr/bin/python python /usr/bin/python2 1
 
 # Let my people paste!
 RUN echo "bind 'set enable-bracketed-paste off'" >> /etc/bash.bashrc
