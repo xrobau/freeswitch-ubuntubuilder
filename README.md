@@ -5,8 +5,8 @@ latest Ubuntu releases, and I monitor the signalwire/freeswitch git
 repos and update when needed.
 
 ## Current config:
+* Ubuntu 24.04
 * Freeswitch git as of 2022-06-10
-* 
 
 ## Older Versions
 
@@ -29,9 +29,9 @@ spare space on the machine you're building on
 
 ## Patches
 
-Add patches to the `patches` folder. Currently only `patches/freeswitch` is
-used, but the code should be simple enough to expand to other packages that
-are built
+Add patches to the `patches` folder. Some packages don't have patches
+processed, so you'll have to add the code yourself. It should be simple
+enough to expand to other packages if needed.
 
 # How does it all work?
 

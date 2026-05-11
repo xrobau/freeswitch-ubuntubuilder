@@ -1,0 +1,19 @@
+--- signalwire-libks-2653d51/CMakeLists.txt.orig	2026-05-11 11:13:45.715535008 +0000
++++ signalwire-libks-2653d51/CMakeLists.txt	2026-05-11 11:16:05.248535393 +0000
+@@ -199,15 +199,7 @@
+ 	find_program(DPKG_CMD dpkg)
+ 	find_program(LSB_RELEASE_CMD lsb_release)
+ 
+-	# Get distro codename
+-	if(NOT LSB_RELEASE_CMD)
+-		message(WARNING "DEB Generator: Can't find lsb_release in your path. Setting DISTRO_CODENAME to unknown.")
+-		set(DISTRO_CODENAME unknown)
+-	else()
+-		execute_process(COMMAND ${LSB_RELEASE_CMD} -cs
+-			OUTPUT_VARIABLE DISTRO_CODENAME
+-			OUTPUT_STRIP_TRAILING_WHITESPACE)
+-	endif()
++	set(DISTRO_CODENAME "$ENV{BUILDNAME}")
+ 
+ 	# https://gitlab.kitware.com/cmake/cmake/issues/16517
+ 	set(CPACK_COMPONENTS_ALL runtime)

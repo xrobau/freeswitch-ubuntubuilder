@@ -13,12 +13,14 @@ libks-shell: $(BUILDSOURCE)/$(LIBKSPREFIX)/$(LIBKSDEB)
 $(DEBDEST)/$(LIBKSDEB): $(BUILDSOURCE)/$(LIBKSPREFIX)/$(LIBKSDEB)
 	cp $< $@
 
+
 $(BUILDSOURCE)/$(LIBKSPREFIX)/$(LIBKSDEB): $(BASEDOCKERTAG) $(BUILDSOURCE)/$(LIBKSFILENAME)
 	cd $(BUILDSOURCE) && rm -rf $(LIBKSPREFIX) && tar xvf $(BUILDSOURCE)/$(LIBKSFILENAME)
-	# Disable changelog generation
+	# Libks doesn't have a changelog gen, just patches
 	sed -i 's/GIT_FOUND AND GZIP_CMD AND DATE_CMD/FALSE/' $(BUILDSOURCE)/$(LIBKSPREFIX)/CMakeLists.txt
-	docker run --rm $(VOLUMES) -it -e PACKAGE_RELEASE=$(LIBKSREL) -w /usr/local/build/SOURCES/$(LIBKSPREFIX) basedocker:$(VERSION) cmake . -DCMAKE_BUILD_TYPE=Release
-	docker run --rm $(VOLUMES) -it -e PACKAGE_RELEASE=$(LIBKSREL) -w /usr/local/build/SOURCES/$(LIBKSPREFIX) basedocker:$(VERSION) make package
+	cd $(BUILDSOURCE)/$(LIBKSPREFIX); for p in $(ROOT)/patches/libks/*; do patch -p1 < $$p; done
+	docker run --rm $(VOLUMES) -it -e BUILDNAME=$(BUILDNAME) -e PACKAGE_RELEASE=$(LIBKSREL) -w /usr/local/build/SOURCES/$(LIBKSPREFIX) basedocker:$(VERSION) cmake . -DCMAKE_BUILD_TYPE=Release
+	docker run --rm $(VOLUMES) -it -e BUILDNAME=$(BUILDNAME) -e PACKAGE_RELEASE=$(LIBKSREL) -w /usr/local/build/SOURCES/$(LIBKSPREFIX) basedocker:$(VERSION) make package
 
 $(DOWNLOADS)/$(LIBKSFILENAME):
 	wget $(LIBKSURL) -O $(@)
