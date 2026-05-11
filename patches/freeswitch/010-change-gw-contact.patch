@@ -1,0 +1,28 @@
+--- signalwire-freeswitch-9df3076/src/mod/endpoints/mod_sofia/sofia.c.orig	2024-01-29 16:05:45.000000000 +0000
++++ signalwire-freeswitch-9df3076/src/mod/endpoints/mod_sofia/sofia.c	2026-05-11 11:45:45.351184958 +0000
+@@ -4191,14 +4191,14 @@
+ 				}
+ 			} else {
+ 				if (rfc_5626) {
+-					format = strchr(sipip, ':') ? "<sip:gw+%s@[%s]:%d%s>%s" : "<sip:gw+%s@%s:%d%s>%s";
++					format = strchr(sipip, ':') ? "<sip:QUAD%s@[%s]:%d%s>%s" : "<sip:QUAD%s@%s:%d%s>%s";
+ 					gateway->register_contact = switch_core_sprintf(gateway->pool, format, gateway->name,
+ 							sipip,
+ 							sofia_glue_transport_has_tls(gateway->register_transport) ?
+ 							profile->tls_sip_port : profile->extsipport, params, str_rfc_5626);
+ 
+ 				} else {
+-					format = strchr(sipip, ':') ? "<sip:gw+%s@[%s]:%d%s>" : "<sip:gw+%s@%s:%d%s>";
++					format = strchr(sipip, ':') ? "<sip:QUAD%s@[%s]:%d%s>" : "<sip:QUAD%s@%s:%d%s>";
+ 					gateway->register_contact = switch_core_sprintf(gateway->pool, format, gateway->name,
+ 							sipip,
+ 							sofia_glue_transport_has_tls(gateway->register_transport) ?
+@@ -11292,7 +11292,7 @@
+ 		gw_param_name = switch_find_parameter(sip->sip_request->rq_url->url_params, "gw", switch_core_session_get_pool(session));
+ 	}
+ 
+-	if (strstr(destination_number, "gw+")) {
++	if (strstr(destination_number, "QUAD")) {
+ 		if (sofia_test_pflag(profile, PFLAG_FULL_ID)) {
+ 			char *tmp;
+ 			gw_name = switch_core_session_strdup(session, destination_number + 3);
